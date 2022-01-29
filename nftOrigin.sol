@@ -1157,10 +1157,13 @@ utilize la funcion owner() que se encuenta en el contracto Ownable linea: 1008
 2-si realizara una pre-venta de nft la mejor practica es crear un 
 contrato de pre-venta que pueda manipular el contrato nft
 
-3-permitir que el owner pause el contrato
+3-permisos unicos que el owner deberia de tener
 
-4-permitir al owner cambiar el precio del mint de nft
+3.1-pausar el contrato
 
-5-permitir al owner cambiar la cantidad de nft hacer minteados
+3.2-cambiar el precio del mint de nft
 
+3.3-cambiar la cantidad de nft que seran minteados
+
+3.4-mintear nft sin costos
 */
