@@ -25,12 +25,13 @@ contract SpaceWorms is Ownable, ERC721 {
         price = 100; // 100 BUSD
 
         maxNFTAmount = 10;
-        paused = false;                      //@dev este contrato no corresponde al busd de la red de bsc maint
+        paused = false;                      //@dev este contrato no coresponde al busd de la red de bsc maint
         BUSDAddress = IERC20(_busdAddress); //BUSD Address on BSC mainnet is `0x4Fabb145d64652a948d72533023f6E7A623C7C53`
         maxNFTPerUser = 2;
 
     }
-
+    //@dev funcion pause no implementada correctamenta usar la libreria de oppenzepelin pausable para mejor seguridad de implemetacion
+    //https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/Pausable.sol
     function setPaused(bool _paused) public onlyOwner {
         paused = _paused;
     }
@@ -67,7 +68,7 @@ contract SpaceWorms is Ownable, ERC721 {
     }
 
     function withdraw() external onlyOwner {
-        //@dev estas consultando el balance en bnb del contraton deberia consultar si almacena busd
+        //@dev estas consultando el balance en bnb del contraton deberia consultar si tiene busd
         uint256 balance = address(this).balance;
 
         BUSDAddress.transfer(msg.sender, balance);
@@ -82,3 +83,4 @@ contract SpaceWorms is Ownable, ERC721 {
         return _tokenIdCounter.current();
     }
 }
+
