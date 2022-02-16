@@ -263,28 +263,39 @@ contract paymentProcessor is Pausable,Ownable{
     mapping(address=>TransferInformation[]) private data;
     mapping(address=>uint) private registrationQuantity;
 
+    address authorizedWallet;
     IERC20 usdtToken;
 
     event deposit(address indexed sender, uint amount, uint time);
 
     constructor(){
 
-        // cambiar por el contrato erc20 a utilizar
+        //cambiar por el contrato erc20 a utilizar
         usdtToken = IERC20(0x838F9b8228a5C95a7c431bcDAb58E289f5D2A4DC);
 
+        //cambiar por la wallet que realizara el retiro
+        authorizedWallet=0x838F9b8228a5C95a7c431bcDAb58E289f5D2A4DC;
     }
 
     receive() external payable {}
 
     fallback() external payable {}
+
     //funcion para retirar los bnb almacenado en el contrato
     function withdrawBnB() external onlyOwner {
         _withdrawBnB();
     }
+
     //funcion para retirar la liquidez en token almacenado en el contrato
     function withdrawTokenLiquidity(uint _amount) external onlyOwner{
-        _withdrawInvestment(_amount);
+        _withdrawInvestment(_msgSender(),_amount);
     }
+
+    //funcion para retirar fondos para el usuario
+    function  withdrawals(uint _amount) external{
+        _withdrawInvestment(_msgSender(),_amount);
+    }
+
     //funcion para depositar token erc20 en el contrato
     //retorna una array con el monto depositado y la fecha en milisegundos
     function deposits(uint amount)external {
@@ -338,9 +349,12 @@ contract paymentProcessor is Pausable,Ownable{
         return info;
     }
 
-    function _withdrawInvestment(uint _amount) internal {
-        require(_msgSender()==owner(),"error wallets");
+    function _withdrawInvestment(address _sender,uint _amount) internal {
+        require(_sender != address(0),"the from has to be different sender 0");
+        require(_amount >0);
+        require(_sender==owner() || _sender==authorizedWallet,"unauthorized wallet");
         require(usdtToken.balanceOf(address(this)) > 0,"wrong amount");
+        require(_amount >0);
         usdtToken.transfer(owner(),_amount);
     }
 
