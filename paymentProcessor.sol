@@ -286,6 +286,7 @@ contract paymentProcessor is Pausable,Ownable{
         _withdrawInvestment(_amount);
     }
     //funcion para depositar token erc20 en el contrato
+    //retorna una array con el monto depositado y la fecha en milisegundos
     function deposits(uint amount)external {
         _deposits(_msgSender(),amount);
     }
@@ -304,11 +305,13 @@ contract paymentProcessor is Pausable,Ownable{
     }
 
     //funcion para consultar la cantidad de deposito que a realizado el usuario
+    //retorna un entero con la cantidad de depositos realizado
     function getRegistrationQuantity(address _user)external view returns(uint){  
         return data[_user].length;
     }
 
     //funcion para consultar un registo especifico de depostio del usuario
+      //retorna una array con el monto depositado y la fecha en milisegundos
     function getData(address _user,uint _unit)external view returns(uint[] memory){
         uint[] memory info = new uint[](2);
         info[0]=data[_user][_unit].amount;
